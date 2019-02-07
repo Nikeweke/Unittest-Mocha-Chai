@@ -5,10 +5,7 @@
   "main": "app.js",
   "scripts": {
     "dev": "node app",
-    "hrm": "supervisor -e njk,js app",
-    "start": "node app prod",
-    "daemon": "supervisor app",
-    "test": "mocha --exit"
+    "test": "mocha --exit --timeout 10000"
   },
   "repository": {
     "type": "git",
@@ -28,7 +25,7 @@
     "colors": "^1.1.2",
     "cookie-parser": "^1.4.3",
     "express": "^4.14.0",
-    "nunjucks": "^3.0.1"
+    "node-ttl": "0.0.6"
   },
   "devDependencies": {
     "chai": "^4.2.0",

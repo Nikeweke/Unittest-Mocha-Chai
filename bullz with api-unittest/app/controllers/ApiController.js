@@ -1,9 +1,11 @@
 /** @module ApiController */
 
+const NodeTtl = require('node-ttl')
+
 module.exports = {
 
   stack: [],
-  store: {},
+  store: new NodeTtl(),
 
   /**
   * @api {GET}  /api/stack  getFromStack()
@@ -27,7 +29,6 @@ module.exports = {
     return res.json({ success: 1, msg: 'Word was added'})
   },  
 
-
   /**
   * @api {POST} /api/stack   addKeyToStore()
   * @apiDescription          Add to stack a word
@@ -35,7 +36,8 @@ module.exports = {
   */
   addKeyToStore (req, res) {
     let {key, value, ttl} = req.body
-    this.store[key] = ttl ? { value, ttl } : value
+    ttl = ttl ? Number(ttl) : 0
+    this.store.push(key, value, null, ttl)
     return res.json({ success: 1, msg: 'Key was added'}) 
   },
 
@@ -46,11 +48,11 @@ module.exports = {
   */
   getValueByKey (req, res) {
     let { key } = req.params
-    if (!this.store[key]) {
+    if (!this.store.get(key)) {
       return res.json({success: 0, msg: 'No such key in store'})
     }
 
-    return res.json({ value: this.store[key] })
+    return res.json({ success: 1,  value: this.store.get(key) })
   },
 
   /**
@@ -60,8 +62,13 @@ module.exports = {
   */
   deleteValueByKey (req, res) {
     let { key } = req.params
-    delete this.store[key]
-    return res.json({ success: 1, msg: 'Key was deleted'})     
+    let result = this.store.del(key)
+
+    if (result) {
+      return res.json({ success: 1, msg: 'Key was deleted'})     
+    } else {
+      return res.json({ success: 0, msg: 'Something went wrong'})
+    }
   },
 
 

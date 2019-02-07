@@ -13,6 +13,5 @@ module.exports = function (app) {
   app.use(cookieParser())
 
   // routes
-  app.use('/',    require('../routes/web'))
   app.use('/api', require('../routes/api'))
 }

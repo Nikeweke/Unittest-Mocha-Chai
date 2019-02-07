@@ -29,7 +29,8 @@ module.exports = function (server) {
       it('it should POST an item and receive response with success = 1', (done) => {
         let item = {
           key:   'name',
-          value: 'Indiana Jones'
+          value: 'Indiana Jones',
+          ttl: 1
         }
 
         chai.request(server)
@@ -44,29 +45,36 @@ module.exports = function (server) {
       })
     })
 
-    describe(`{DELETE} ${TEST_API}/:key`, () => {
-      it('it should DELETE a key from store', (done) => {
-        chai.request(server)
-          .delete(`${TEST_API}/${PARAM}`)
-          .end((err, res) => {
-            res.should.have.status(200)
-            res.body.should.be.a('object')
-            res.body.should.eql({ success: 1, msg: 'Key was deleted'})
-            done()
-          })
-      })
-    })
+    // describe(`{DELETE} ${TEST_API}/:key`, () => {
+    //   it('it should DELETE a key from store', (done) => {
+    //     chai.request(server)
+    //       .delete(`${TEST_API}/${PARAM}`)
+    //       .end((err, res) => {
+    //         res.should.have.status(200)
+    //         res.body.should.be.a('object')
+    //         res.body.should.eql({ success: 1, msg: 'Key was deleted'})
+    //         done()
+    //       })
+    //   })
+    // })
 
+    
     describe(`{GET} ${TEST_API}/:key`, () => {
       it(`it should GET empty object with {success: 0, msg: 'No such key in store'}`, (done) => {
-        chai.request(server)
-          .get(`${TEST_API}/${PARAM}`)
-          .end((err, res) => {
-            res.should.have.status(200)
-            res.body.should.be.a('object')
-            res.body.should.eql({success: 0, msg: 'No such key in store'})
-            done()
-          })
+
+        new Promise((r, j) => setTimeout(r, 2000))
+        .then(() => {
+          chai.request(server)
+              .get(`${TEST_API}/${PARAM}`)
+              .end((err, res) => {
+                res.should.have.status(200)
+                res.body.should.be.a('object')
+                res.body.should.eql({success: 0, msg: 'No such key in store'})
+                done()
+              })
+        })
+        .catch(done)
+      
       })
     })
   })

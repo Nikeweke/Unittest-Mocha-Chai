@@ -3,11 +3,13 @@
 *
 *  app.js
 */
+const express    = require('express')
+const routes     = require('./config/routes')
+const server     = require('./config/server.js')
 
-// Requires
-const bootstrap = require('./config/bootstrap.js')
+const app = express()
+routes(app)
+module.exports = server(app) 
 
-// Bootstraping APP
-bootstrap()
 
 
