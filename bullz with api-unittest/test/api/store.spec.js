@@ -60,7 +60,7 @@ module.exports = function (server) {
 
     
     describe(`{GET} ${TEST_API}/:key`, () => {
-      it(`it should GET empty object with {success: 0, msg: 'No such key in store'}`, (done) => {
+      it(`it should wait 2000 seconds, and then GET empty object with {success: 0, msg: 'No such key in store'}`, (done) => {
 
         new Promise((r, j) => setTimeout(r, 2000))
         .then(() => {
